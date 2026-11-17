@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from . import models  # noqa: F401  (registra as tabelas)
 from .database import Base, engine
+from .demo_data import carregar_dados_demo
 from .erros import ErroRegra
 from .routes_auth import router as rotas_acesso
 from .routes_entregas import router as rotas_entregas
@@ -13,6 +14,7 @@ from .routes_familias import router as rotas_familias
 from .routes_painel import router as rotas_painel
 
 Base.metadata.create_all(bind=engine)
+carregar_dados_demo()
 
 app = FastAPI(title="Cesta Certa")
 pasta_static = Path(__file__).parent / "static"
