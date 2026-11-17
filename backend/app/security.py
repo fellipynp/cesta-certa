@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import bcrypt
 import jwt
 
+
 # A chave vem de variável de ambiente. Nunca escreva a chave real no código.
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-apenas-para-desenvolvimento")
 ALGORITHM = "HS256"
