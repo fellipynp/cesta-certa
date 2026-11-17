@@ -31,6 +31,16 @@
         <button id="logout" class="logout">Sair</button>
       </div>
       <div class="page-heading" id="page-heading">Menu inicial</div>
+      <div class="accessibility-tools" role="group" aria-label="Opções de acessibilidade">
+        <button id="contrast-toggle" class="accessibility-button" type="button" aria-pressed="false">Alto contraste: desligado</button>
+        <div class="font-controls" role="group" aria-label="Tamanho do texto">
+          <span aria-hidden="true">Texto:</span>
+          <button id="font-decrease" class="accessibility-button" type="button" aria-label="Diminuir tamanho do texto">A−</button>
+          <button id="font-reset" class="accessibility-button" type="button" aria-label="Restaurar tamanho padrão do texto">A</button>
+          <button id="font-increase" class="accessibility-button" type="button" aria-label="Aumentar tamanho do texto">A+</button>
+        </div>
+        <span id="accessibility-status" class="sr-only" role="status" aria-live="polite"></span>
+      </div>
     </header>
 
     <div class="app-shell">
