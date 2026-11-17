@@ -1,3 +1,4 @@
+
 """Dados fictícios opcionais para demonstração. Ative apenas em ambiente de teste."""
 import os
 from datetime import date, timedelta
@@ -14,15 +15,25 @@ def carregar_dados_demo():
     email = os.getenv("DEMO_EMAIL", "maria@cestacerta.com")
     senha = os.getenv("DEMO_PASSWORD", "Maria123!")
     db = SessionLocal()
+
     try:
         usuario = db.query(Usuario).filter(Usuario.email == email).first()
+
         if usuario is None:
-            db.add(Usuario(
+            usuario = Usuario(
                 nome="Maria",
                 email=email,
                 senha_hash=gerar_hash(senha),
                 perfil="coordenador",
-            ))
+            )
+            db.add(usuario)
+        else:
+            usuario.nome = "Maria"
+            usuario.senha_hash = gerar_hash(senha)
+            usuario.perfil = "coordenador"
+            usuario.ativo = True
+            usuario.tentativas_falhas = 0
+            usuario.bloqueado_ate = None
 
         if db.query(Familia).count() == 0:
             db.add_all([
@@ -45,6 +56,7 @@ def carregar_dados_demo():
                 ItemEstoque(nome_produto="Óleo 900 ml", unidade="unidade",
                             quantidade_atual=8, data_validade=date.today()+timedelta(days=7)),
             ])
+
         db.commit()
     finally:
         db.close()
