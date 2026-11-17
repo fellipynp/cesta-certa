@@ -67,12 +67,23 @@ def criar_usuario(
 ):
     if db.query(Usuario).filter(Usuario.email == dados.email).first():
         raise HTTPException(status_code=409, detail="E-mail já cadastrado.")
+    try:
+        senha_hash = gerar_hash(dados.senha)
+    except ValueError:
+        raise HTTPException(
+            status_code=422,
+            detail="A senha é longa demais. Use uma senha menor.",
+        )
     novo = Usuario(
         nome=dados.nome,
         email=dados.email,
-        senha_hash=gerar_hash(dados.senha),
+        senha_hash=senha_hash,
         perfil=dados.perfil,
     )
+    db.add(novo)
+    db.commit()
+    db.refresh(novo)
+    return {"id_usuario": novo.id_usuario, "nome": novo.nome, "perfil": novo.perfil}
     db.add(novo)
     db.commit()
     db.refresh(novo)
