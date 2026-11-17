@@ -9,14 +9,28 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-apenas-para-desenvolvimento")
 ALGORITHM = "HS256"
 EXPIRA_MINUTOS = 30
 
+LIMITE_BYTES_BCRYPT = 72
+
+
+def _bytes_da_senha(senha: str) -> bytes:
+    """O bcrypt só considera 72 bytes; acima disso recusamos a senha."""
+    dados = senha.encode("utf-8")
+    if len(dados) > LIMITE_BYTES_BCRYPT:
+        raise ValueError("Senha maior que 72 bytes.")
+    return dados
+
 
 def gerar_hash(senha: str) -> str:
     """Guarda a senha apenas como hash bcrypt, com salt individual."""
-    return bcrypt.hashpw(senha.encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
+    return bcrypt.hashpw(_bytes_da_senha(senha), bcrypt.gensalt(rounds=12)).decode("utf-8")
 
 
 def verificar_senha(senha: str, senha_hash: str) -> bool:
-    return bcrypt.checkpw(senha.encode("utf-8"), senha_hash.encode("utf-8"))
+    try:
+        dados = _bytes_da_senha(senha)
+    except ValueError:
+        return False
+    return bcrypt.checkpw(dados, senha_hash.encode("utf-8"))
 
 
 def criar_token(id_usuario: int, perfil: str) -> str:
