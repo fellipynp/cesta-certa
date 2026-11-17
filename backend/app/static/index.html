@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4d">
+  <title>Cesta Certa</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main id="login-view" class="login-wrap">
+    <section class="login-card">
+      <div class="brand-mark">CC</div>
+      <h1>Cesta Certa</h1>
+      <p>Gestão de entregas e famílias</p>
+      <form id="login-form">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" autocomplete="username" required placeholder="seu@email.com">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" autocomplete="current-password" required placeholder="Sua senha">
+        <button class="primary full" type="submit">Entrar</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+  </main>
+
+  <div id="app-view" class="hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div><strong class="brand">Cesta Certa</strong><span class="subtitle">Gestão de entregas e famílias</span></div>
+        <button id="logout" class="logout">Sair</button>
+      </div>
+      <div class="page-heading" id="page-heading">Menu inicial</div>
+    </header>
+
+    <div class="app-shell">
+      <nav class="tabs" aria-label="Navegação principal">
+        <button class="tab active" data-page="home">Início</button>
+        <button class="tab" data-page="delivery">Registrar entrega</button>
+        <button class="tab" data-page="alerts">Alertas e resultados</button>
+      </nav>
+
+      <section id="page-home" class="page">
+        <div class="welcome">
+          <div><h2>Olá!</h2><p>Confira o que precisa de atenção hoje.</p></div>
+          <span class="role-pill">Área de gestão</span>
+        </div>
+        <button class="feature-card" data-go="delivery">
+          <span class="feature-icon">▦</span>
+          <span><strong>Registrar entrega</strong><small>Registrar a cesta mensal de uma família</small></span>
+          <span class="arrow">→</span>
+        </button>
+        <h3>Acessos rápidos</h3>
+        <div class="quick-grid">
+          <button class="quick-card" data-go="delivery"><span>👥</span><strong>Famílias</strong><small>Consultar famílias</small></button>
+          <button class="quick-card" data-go="alerts"><span>📦</span><strong>Estoque</strong><small>Ver vencimentos</small></button>
+          <button class="quick-card" data-go="alerts"><span>▤</span><strong>Relatório</strong><small>Ver resultados</small></button>
+        </div>
+        <div id="home-alert" class="notice warning hidden"></div>
+        <h3 id="home-month-title">Acompanhamento do mês</h3>
+        <div class="panel progress-panel">
+          <div class="progress-heading"><strong id="home-count">Carregando...</strong><span id="home-percent">—</span></div>
+          <div class="progress-track"><div id="home-progress" class="progress-fill" style="width:0%"></div></div>
+          <p class="muted">Famílias atendidas neste mês</p>
+        </div>
+      </section>
+
+      <section id="page-delivery" class="page hidden">
+        <div class="back-row"><button class="secondary" data-go="home">← Voltar ao menu</button></div>
+        <label class="field-label" for="family-search">Buscar família (nome do responsável)</label>
+        <input id="family-search" class="search-input" type="search" placeholder="Digite o nome da família">
+        <div class="section-row"><h3>Resultados da busca</h3><span id="family-count" class="muted"></span></div>
+        <div id="family-results" class="family-list"><p class="muted">Carregando famílias...</p></div>
+        <div class="panel delivery-summary">
+          <h3>Entrega selecionada</h3>
+          <p id="selected-family" class="muted">Selecione uma família na lista para continuar.</p>
+          <div class="summary-meta"><div><small>Data de hoje</small><strong id="today-date"></strong></div><div><small>Registro feito por</small><strong>Usuário autenticado</strong></div></div>
+          <button id="register-delivery" class="primary full" disabled>Registrar entrega</button>
+          <p id="delivery-message" class="message" role="status"></p>
+        </div>
+      </section>
+
+      <section id="page-alerts" class="page hidden">
+        <div id="duplicate-alert" class="notice warning hidden"></div>
+        <h3>Itens perto do vencimento</h3>
+        <p class="muted section-subtitle">Produtos com validade nos próximos 15 dias</p>
+        <div id="stock-alerts" class="family-list"><p class="muted">Carregando alertas...</p></div>
+        <h3>Resumo do mês</h3>
+        <div class="panel stats-panel">
+          <div class="stat-row"><span>Famílias atendidas</span><strong id="stat-attended">—</strong></div>
+          <div class="stat-row"><span>Famílias pendentes</span><strong id="stat-pending">—</strong></div>
+          <div class="stat-row"><span>Cestas entregues</span><strong id="stat-deliveries">—</strong></div>
+          <div class="stat-row"><span>Itens descartados</span><strong id="stat-discarded">—</strong></div>
+        </div>
+        <button class="secondary full" data-go="home">Voltar ao menu</button>
+      </section>
+      <footer>Cesta Certa · <span id="footer-year"></span></footer>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
