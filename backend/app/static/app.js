@@ -107,4 +107,55 @@ $("family-search").addEventListener("input",()=>{clearTimeout(searchTimer);searc
 $("register-delivery").addEventListener("click",registerDelivery);
 $("today-date").textContent=new Date().toLocaleDateString("pt-BR");
 $("footer-year").textContent=new Date().toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+
+
+// Preferências de acessibilidade salvas neste navegador.
+const FONT_LEVELS = ["small", "normal", "large", "larger"];
+let fontLevel = localStorage.getItem("cesta_font_level") || "normal";
+let highContrast = localStorage.getItem("cesta_high_contrast") === "true";
+
+function applyAccessibilitySettings() {
+  document.documentElement.dataset.fontSize = FONT_LEVELS.includes(fontLevel) ? fontLevel : "normal";
+  document.body.classList.toggle("high-contrast", highContrast);
+  const contrastButton = $("contrast-toggle");
+  contrastButton.setAttribute("aria-pressed", String(highContrast));
+  contrastButton.textContent = highContrast ? "Alto contraste: ligado" : "Alto contraste: desligado";
+}
+
+function announceAccessibility(message) {
+  $("accessibility-status").textContent = message;
+}
+
+$("contrast-toggle").addEventListener("click", () => {
+  highContrast = !highContrast;
+  localStorage.setItem("cesta_high_contrast", String(highContrast));
+  applyAccessibilitySettings();
+  announceAccessibility(highContrast ? "Modo de alto contraste ativado." : "Modo de alto contraste desativado.");
+});
+
+$("font-decrease").addEventListener("click", () => {
+  const current = FONT_LEVELS.indexOf(fontLevel);
+  fontLevel = FONT_LEVELS[Math.max(0, current - 1)];
+  localStorage.setItem("cesta_font_level", fontLevel);
+  applyAccessibilitySettings();
+  announceAccessibility("Tamanho do texto ajustado.");
+});
+
+$("font-increase").addEventListener("click", () => {
+  const current = FONT_LEVELS.indexOf(fontLevel);
+  fontLevel = FONT_LEVELS[Math.min(FONT_LEVELS.length - 1, current + 1)];
+  localStorage.setItem("cesta_font_level", fontLevel);
+  applyAccessibilitySettings();
+  announceAccessibility("Tamanho do texto ajustado.");
+});
+
+$("font-reset").addEventListener("click", () => {
+  fontLevel = "normal";
+  localStorage.setItem("cesta_font_level", fontLevel);
+  applyAccessibilitySettings();
+  announceAccessibility("Tamanho padrão do texto restaurado.");
+});
+
+applyAccessibilitySettings();
+
 if(token)openApp();
